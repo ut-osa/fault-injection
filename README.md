@@ -18,7 +18,7 @@ Interface
 
 The user level interface provides a number of functions:
 
-** ./swifi debug
+./swifi debug
 
     Rotate through the different verbosity and debug modes.
 
@@ -33,7 +33,7 @@ The user level interface provides a number of functions:
 
     The code is initialized to Mode 0.
 
-** ./swifi target type numfaults rand_seed
+./swifi target type numfaults rand_seed
 
     These parameters are initialized to:
 	
@@ -41,7 +41,7 @@ The user level interface provides a number of functions:
 		numfaults = 1
 		rand_seed = 1
 
-*** target:
+- target:
 
     all:
 	Choose an address from the kernel text and kernel module text.
@@ -56,7 +56,7 @@ The user level interface provides a number of functions:
 	kernel-module:
 	Chooses an address from the designated kernel module.
 
-*** type:
+- type:
 
     text:	Flip a random bit within <target>
 	stack:	Flip a random bit on a random task stack
