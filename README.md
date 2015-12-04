@@ -131,9 +131,13 @@ Bibliography
 ------------
 
 [1] Peter M. Chen, Wee Teck Ng, Subhachandra Chandra, Christopher Aycock, and David Rajamani, Gurushankarand Lowell. The rio file cache: Surviving operating system crashes. In ASPLOS, pages 74–83, 1996.
+
 [2] Michael M. Swift, Brian N. Bershad, and Henry M. Levy. Improving the reliability of commodity operating systems. In SOSP, pages 207–222, 2003.
+
 [3] Nicolas Palix, Gae ̈l Thomas, Suman Saha, Christophe Calve`s, Julia Lawall, and Gilles Muller. Faults in linux: Ten years later. In ASPLOS, pages 305–318, 2011.
+
 [4] Lanyue Lu, Andrea C Arpaci-Dusseau, Remzi H Arpaci-Dusseau, and Shan Lu. A study of linux file system evolution. In FAST, pages 31–44, 2013.
+
 [5] Takeshi Yoshimura, Hiroshi Yamada, and Kenji Kono. Is linux kernel oops useful or not. In HotDep, 2012.
 
 
