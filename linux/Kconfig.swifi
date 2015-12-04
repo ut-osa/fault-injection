@@ -1,0 +1,12 @@
+menu "Software Fault Injection (SWIFI) options"
+
+config SWIFI
+       bool "Software Fault Injection Framework (aka swifi)"
+       default n
+
+config SWIFI_BLOCKING_KMALLOC
+       bool "Enable the unsafe blocking call bug scenario."
+       depends on SWIFI
+       default n
+
+endmenu

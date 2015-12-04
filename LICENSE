@@ -1,0 +1,15 @@
+License
+-------
+/*
+ * swifi: A Linux software fault injection framework.
+ *
+ * Copyright (c) 2014 <anonymous submission>
+ * Copyright (C) 2003 Mike Swift
+ * Copyright (c) 1999 Wee Teck Ng
+ *
+ * The source code in this file can be freely used, adapted,
+ * and redistributed in source or binary form, so long as an
+ * acknowledgment appears in derived source files.  No warranty 
+ * is attached; * we cannot take responsibility for errors or 
+ * fitness for use.
+ */

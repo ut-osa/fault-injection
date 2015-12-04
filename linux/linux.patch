@@ -1,0 +1,152 @@
+diff --git a/Kconfig b/Kconfig
+index c13f48d..42dadfe 100644
+--- a/Kconfig
++++ b/Kconfig
+@@ -9,3 +9,4 @@ config SRCARCH
+ 	option env="SRCARCH"
+ 
+ source "arch/$SRCARCH/Kconfig"
++source "Kconfig.swifi"
+diff --git a/Makefile b/Makefile
+index 6a5bdad..44fb78f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -706,6 +706,9 @@ mod_strip_cmd = true
+ endif # INSTALL_MOD_STRIP
+ export mod_strip_cmd
+ 
++ifeq ($(CONFIG_SWIFI),y)
++core-y         += swifi/
++endif
+ 
+ ifeq ($(KBUILD_EXTMOD),)
+ core-y		+= kernel/ mm/ fs/ ipc/ security/ crypto/ block/
+diff --git a/include/linux/module.h b/include/linux/module.h
+index d9ca2d5..0874af2 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -457,6 +457,7 @@ static inline int within_module_init(unsigned long addr, struct module *mod)
+ 
+ /* Search for module by name: must hold module_mutex. */
+ struct module *find_module(const char *name);
++int each_module(int (*fn)(void *, struct module *), void *data);
+ 
+ struct symsearch {
+ 	const struct kernel_symbol *start, *stop;
+diff --git a/kernel/module.c b/kernel/module.c
+index 795bdc7..22527a6 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -428,6 +428,19 @@ struct module *find_module(const char *name)
+ }
+ EXPORT_SYMBOL_GPL(find_module);
+ 
++int each_module(int (*fn)(void *, struct module *), void *data)
++{
++	struct module *mod;
++	int ret;
++	list_for_each_entry(mod, &modules, list) {
++		ret = fn(data, mod);
++		if (ret != 0)
++			return ret;
++	}
++	return 0;
++}
++EXPORT_SYMBOL(each_module);
++
+ #ifdef CONFIG_SMP
+ 
+ static inline void __percpu *mod_percpu(struct module *mod)
+diff --git a/mm/slab.c b/mm/slab.c
+index d96e223..03bcbd1 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -2441,12 +2441,16 @@ EXPORT_SYMBOL(kmem_cache_create);
+ #if DEBUG
+ static void check_irq_off(void)
+ {
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 	BUG_ON(!irqs_disabled());
++#endif
+ }
+ 
+ static void check_irq_on(void)
+ {
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 	BUG_ON(irqs_disabled());
++#endif
+ }
+ 
+ static void check_spinlock_acquired(struct kmem_cache *cachep)
+@@ -2837,8 +2841,10 @@ static int cache_grow(struct kmem_cache *cachep,
+ 
+ 	offset *= cachep->colour_off;
+ 
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 	if (local_flags & __GFP_WAIT)
+ 		local_irq_enable();
++#endif
+ 
+ 	/*
+ 	 * The test for missing atomic flag is performed here, rather than
+@@ -2867,8 +2873,10 @@ static int cache_grow(struct kmem_cache *cachep,
+ 
+ 	cache_init_objs(cachep, slabp);
+ 
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 	if (local_flags & __GFP_WAIT)
+ 		local_irq_disable();
++#endif
+ 	check_irq_off();
+ 	spin_lock(&l3->list_lock);
+ 
+@@ -2881,8 +2889,10 @@ static int cache_grow(struct kmem_cache *cachep,
+ opps1:
+ 	kmem_freepages(cachep, objp);
+ failed:
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 	if (local_flags & __GFP_WAIT)
+ 		local_irq_disable();
++#endif
+ 	return 0;
+ }
+ 
+@@ -3279,12 +3289,16 @@ retry:
+ 		 * We may trigger various forms of reclaim on the allowed
+ 		 * set and go into memory reserves if necessary.
+ 		 */
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 		if (local_flags & __GFP_WAIT)
+ 			local_irq_enable();
++#endif
+ 		kmem_flagcheck(cache, flags);
+ 		obj = kmem_getpages(cache, local_flags, numa_mem_id());
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 		if (local_flags & __GFP_WAIT)
+ 			local_irq_disable();
++#endif
+ 		if (obj) {
+ 			/*
+ 			 * Insert into the appropriate per node queues
+diff --git a/mm/slub.c b/mm/slub.c
+index 35f351f..98de12d 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -1850,13 +1850,17 @@ new_slab:
+ 	}
+ 
+ 	gfpflags &= gfp_allowed_mask;
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 	if (gfpflags & __GFP_WAIT)
+ 		local_irq_enable();
++#endif
+ 
+ 	page = new_slab(s, gfpflags, node);
+ 
++#ifndef CONFIG_SWIFI_BLOCKING_KMALLOC
+ 	if (gfpflags & __GFP_WAIT)
+ 		local_irq_disable();
++#endif
+ 
+ 	if (page) {
+ 		c = __this_cpu_ptr(s->cpu_slab);

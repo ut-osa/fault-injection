@@ -1,0 +1,31 @@
+swifi
+=====
+
+swifi is a fault injection framework.  It was originally used for the
+RIO File Cache (http://web.eecs.umich.edu/~pmchen/Rio/) and later
+ported for use for NOOKS (http://pages.cs.wisc.edu/~swift/nooks/).
+
+It is now being ported to Linux 2.6.XX (and maybe beyond) for use for
+SEGO.  As part of this porting effort, parts of Udis86, a disassembler
+for x86 and x86-64, has been incorporated into the project.  For more
+on Udis86, see README.udis86.  Also, Udis86 is now at
+https://github.com/vmt/udis86.
+
+License
+-------
+/*
+ * swifi: A Linux software fault injection framework.
+ *
+ * Copyright (c) 2014 <anonymous submission>
+ * Copyright (C) 2003 Mike Swift
+ * Copyright (c) 1999 Wee Teck Ng
+ *
+ * The source code in this file can be freely used, adapted,
+ * and redistributed in source or binary form, so long as an
+ * acknowledgment appears in derived source files.  No warranty 
+ * is attached; * we cannot take responsibility for errors or 
+ * fitness for use.
+ */
+
+Udis86 is distributed under the terms of the 2-clause "Simplified BSD
+License".  See README.udis86.
