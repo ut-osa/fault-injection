@@ -99,7 +99,7 @@ Changes
 Beyond the code restructing, there are a number of changes to both how
 faults are injected as well as what types of faults are supported.
 
-*** Fault types removed:
+- Fault types removed:
 
 1. HEAP_FAULT
 2. SYNC_FAULT
@@ -110,7 +110,7 @@ faults are injected as well as what types of faults are supported.
 
 In addition, the enum for STATS is ignored.
 
-*** New fault types:
+- New fault types:
 
 1. INTRPT_FAULT -- Remove interrupt related handling
 2. ALLOC_SZ_FAULT -- Change the requested allocation size of kmalloc and kzalloc
